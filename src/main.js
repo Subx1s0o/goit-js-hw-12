@@ -1,6 +1,5 @@
 import {
   pixApi,
-  currentPage,
   perPage,
   setCurrentPage,
   getCurrentPage,
@@ -35,11 +34,9 @@ form.addEventListener('submit', async e => {
     if (result.length !== 0 && search !== '') {
       renderImages(result, list);
 
-      totalPages > currentPage
+      totalPages > getCurrentPage()
         ? (moreBtn.style.visibility = 'visible')
         : (moreBtn.style.visibility = 'hidden');
-
-      console.log(totalPages - currentPage);
     } else {
       iziToast.show({
         title: '❌',
@@ -79,8 +76,8 @@ moreBtn.addEventListener('click', async () => {
     const result = data.hits;
     renderImages(result, list);
     const totalPages = Math.ceil(data.totalHits / perPage);
-    console.log(totalPages - currentPage);
-    totalPages > currentPage
+
+    totalPages > getCurrentPage()
       ? (moreBtn.style.visibility = 'visible')
       : iziToast.show({
           title: '❌',

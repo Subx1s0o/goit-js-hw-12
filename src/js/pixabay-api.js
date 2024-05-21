@@ -34,4 +34,4 @@ function getCurrentPage() {
   return currentPage;
 }
 
-export { pixApi, currentPage, perPage, setCurrentPage, getCurrentPage };
+export { pixApi, perPage, setCurrentPage, getCurrentPage };
