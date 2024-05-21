@@ -65,39 +65,21 @@ form.addEventListener('submit', async e => {
 });
 
 //button more
-let totalPages = 0;
-
 moreBtn.addEventListener('click', async () => {
   loader.style.display = 'flex';
   const searchRemember = localStorage.getItem('search');
-  const currentPage = getCurrentPage() + 1;
 
-  if (totalPages && currentPage > totalPages) {
-    iziToast.show({
-      title: '❌',
-      message: "We're sorry, but you've reached the end of search results.",
-      messageColor: 'white',
-      backgroundColor: '#E25757',
-      position: 'topRight',
-      timeout: 5000,
-    });
-    loader.style.display = 'none';
-    return;
-  }
-
-  setCurrentPage(currentPage);
+  setCurrentPage(getCurrentPage() + 1);
 
   try {
     const data = await pixApi(searchRemember);
     const result = data.hits;
-
-    if (!totalPages) {
-      totalPages = Math.ceil(data.totalHits / perPage);
-    }
+    const card = document.querySelector('.card');
+    const totalPages = Math.ceil(data.totalHits / perPage);
 
     renderImages(result, list);
 
-    if (totalPages > currentPage) {
+    if (totalPages > getCurrentPage()) {
       moreBtn.style.visibility = 'visible';
     } else {
       iziToast.show({
@@ -111,7 +93,6 @@ moreBtn.addEventListener('click', async () => {
       moreBtn.style.visibility = 'hidden';
     }
 
-    const card = document.querySelector('.card');
     const cardHeight = Math.floor(card.getBoundingClientRect().height);
     scrollBy(0, cardHeight * 2);
   } catch (error) {
