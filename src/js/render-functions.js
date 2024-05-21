@@ -9,13 +9,20 @@ const lightbox = new SimpleLightbox('.card-link', {
 });
 
 const renderImages = (resultData, list) => {
-  list.innerHTML = '';
-  let li = '';
-
-  resultData.forEach(element => {
-    li += `<li class="card">
-                <a class="card-link" href="${element.largeImageURL}">
-                    <img  class="card-image" src="${element.webformatURL}" alt="${element.tags}" /> 
+  const markup = resultData
+    .map(
+      ({
+        largeImageURL,
+        likes,
+        comments,
+        views,
+        downloads,
+        tags,
+        webformatURL,
+      }) => {
+        return `<li class="card">
+                <a class="card-link" href="${largeImageURL}">
+                    <img  class="card-image" src="${webformatURL}" alt="${tags}" /> 
                 </a>
                 <div class="main-content">
                     <ul class="card-list">
@@ -23,32 +30,34 @@ const renderImages = (resultData, list) => {
                             <h3>
                                 likes
                             </h3>
-                            <p>${element.likes}</p>
+                            <p>${likes}</p>
                         </li>
                         <li class="card-list-li">
                             <h3>
                                 views
                             </h3>
-                            <p>${element.views}</p>
+                            <p>${views}</p>
                         </li>
                         <li class="card-list-li">
                             <h3>
                                 comments
                             </h3>
-                            <p>${element.comments}</p>
+                            <p>${comments}</p>
                         </li>
                         <li class="card-list-li">
                             <h3>
                                 downloads
                             </h3>
-                            <p>${element.downloads}</p>
+                            <p>${downloads}</p>
                         </li>
                     </ul>
                 </div>
             </li>`;
-  });
+      }
+    )
+    .join('');
 
-  list.insertAdjacentHTML('beforeend', li);
+  list.insertAdjacentHTML('beforeend', markup);
 
   lightbox.refresh();
 };
