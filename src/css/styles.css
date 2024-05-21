@@ -6,6 +6,10 @@
 */
 @import url('./reset.css');
 
+html {
+  scroll-behavior: smooth;
+}
+
 form {
   margin-top: 36px;
   display: flex;
@@ -54,6 +58,7 @@ button[type='submit'] {
   gap: 24px;
   align-items: center;
   flex-wrap: wrap;
+  margin-bottom: 30px;
 }
 
 .card {
@@ -94,9 +99,10 @@ button[type='submit'] {
 }
 
 .loader-div {
-  display: flex;
+  display: none;
   justify-content: center;
-  visibility: hidden;
+
+  margin-bottom: 30px;
 }
 
 .loader {
@@ -158,3 +164,23 @@ button[type='submit'] {
   color: #fff;
   border-radius: 8px;
 }
+
+/* .up {
+  display: none;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  border: 2px solid #042a91;
+  background-color: #4e75ff;
+  padding: 20px 20px;
+  color: #fff;
+  font-size: 20px;
+  border-radius: 100%;
+  transition: all ease 250ms;
+}
+
+@media (hover: hover) {
+  .up:hover {
+    background-color: #042a91;
+  }
+} */

@@ -14,20 +14,20 @@ const loader = document.querySelector('.loader-div');
 const list = document.querySelector('.list');
 const moreBtn = document.querySelector('.show-more');
 
-let searchRemember = '';
-
 form.addEventListener('submit', async e => {
   e.preventDefault();
-  loader.style.visibility = 'visible';
 
+  loader.style.display = 'flex';
+  localStorage.removeItem('search');
   const search = input.value.trim();
   list.innerHTML = '';
 
   setCurrentPage(1);
+  moreBtn.style.visibility = 'hidden';
 
   try {
     const data = await pixApi(search);
-    searchRemember = search;
+    localStorage.setItem('search', search);
     const result = data.hits;
     const totalPages = Math.ceil(data.totalHits / perPage);
 
@@ -59,34 +59,43 @@ form.addEventListener('submit', async e => {
       timeout: 5000,
     });
   } finally {
-    loader.style.visibility = 'hidden';
-
+    loader.style.display = 'none';
     e.target.reset();
   }
 });
 
 //button more
 moreBtn.addEventListener('click', async () => {
-  loader.style.visibility = 'visible';
+  loader.style.display = 'flex';
+  const searchRemember = localStorage.getItem('search');
 
   setCurrentPage(getCurrentPage() + 1);
 
   try {
     const data = await pixApi(searchRemember);
     const result = data.hits;
+    const card = document.querySelector('.card');
+
     renderImages(result, list);
+    const cardHeight = Math.floor(card.getBoundingClientRect().height);
+
+    scrollBy(0, cardHeight * 2);
+
     const totalPages = Math.ceil(data.totalHits / perPage);
 
-    totalPages > getCurrentPage()
-      ? (moreBtn.style.visibility = 'visible')
-      : iziToast.show({
-          title: '❌',
-          message: "We're sorry, but you've reached the end of search results.",
-          messageColor: 'white',
-          backgroundColor: '#E25757',
-          position: 'topRight',
-          timeout: 5000,
-        });
+    if (totalPages > getCurrentPage()) {
+      moreBtn.style.visibility = 'visible';
+    } else {
+      iziToast.show({
+        title: '❌',
+        message: "We're sorry, but you've reached the end of search results.",
+        messageColor: 'white',
+        backgroundColor: '#E25757',
+        position: 'topRight',
+        timeout: 5000,
+      });
+      return;
+    }
   } catch (error) {
     console.error('Помилка при рендері картинок', error);
 
@@ -99,6 +108,6 @@ moreBtn.addEventListener('click', async () => {
       timeout: 5000,
     });
   } finally {
-    loader.style.visibility = 'hidden';
+    loader.style.display = 'none';
   }
 });
